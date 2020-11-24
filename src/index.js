@@ -1,14 +1,23 @@
 import './index.css'
-import _ from 'lodash';
+// import _ from 'lodash';
+
+// webpack copies image to /dist, hashes filename, and returns URL
+import ImageDogeUrl from './assets/doge.jpg';
 
 function component() {
-    const element = document.createElement('div');
-  
-    // Lodash, currently included via a script, is required for this line to work
-    element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-    element.classList.add('hello')
-  
-    return element;
+    const root = document.createElement('div');
+    root.classList.add('root');
+    
+    const header = document.createElement('div');
+    header.innerHTML = 'Hello Webpack'; //_.join(['Hello', 'webpack'], ' ');
+    header.classList.add('header')
+    root.appendChild(header);
+    
+    const image = new Image (200, 200);
+    image.src = ImageDogeUrl;
+    root.appendChild(image);
+    
+    return root;
   }
   
 document.body.appendChild(component());
