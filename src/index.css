@@ -5,11 +5,14 @@
 }
 
 .header {
-    margin-bottom: 2rem;
     font-weight: bold;
     text-align: center;
     font-size: 2rem;
     animation: color-change 3s infinite;
+}
+
+img {
+    margin: 2rem 0;
 }
 
 @keyframes color-change {
