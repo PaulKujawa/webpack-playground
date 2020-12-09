@@ -1,19 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
+import ImageDogeUrl from './assets/doge.jpg'; // includes domain and port
 import './index.css'
-import ImageDogeUrl from './assets/doge.jpg';
+
+// see https://babeljs.io/docs/en/babel-polyfill
+// import "core-js/stable";
+import "regenerator-runtime/runtime";
+
 import(/* webpackPreload: true */ 'lodash');
 
 const App = () => {
     const [input, setInput] = React.useState('');
 
-    const onClick = () => {
-        // dynamic import for code splitting, i.e. creates a separate bundle for lodash.
-        import(/* webpackPreload: true */ 'lodash').then(({default: _}) => {
-            const msg = _.join(['this', 'actually', 'worked']);
-            console.log(msg);
-        })
+    const onClick = async () => {
+        const { default: _ } = await import(/* webpackChunkName: "lodash" */ 'lodash');
+     
+        const msg = _.join(['this', 'actually', 'worked'], ' ');
+        console.log(msg);
     }
 
     return <div className="root">

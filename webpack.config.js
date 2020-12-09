@@ -3,19 +3,21 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-module.exports = (env, argv) => {
+module.exports = (env = {}, argv) => {
     const isDev = argv.mode === 'development';
     const isTest = argv.mode === 'test';
     const isProd = argv.mode === 'production' || argv.mode === undefined; // prod is default
 
-    const config = {
+    return {
         entry: {
             index: './src/index.jsx'
         },
         output: {
             // where to put any output file - the dist folder for the webserver and nginx.
             path: path.resolve(__dirname, 'dist'),
-            filename: '[name].bundle.js',
+            // also used for bundles created via dynamic imports.
+            filename: '[name].[contenthash].js',
+            // publicPath: '/'
         },
         resolve: {
             extensions: ['.js', '.jsx']
@@ -24,7 +26,7 @@ module.exports = (env, argv) => {
         devtool: isProd ? 'source-map' : 'eval-cheap-source-map',
         devServer: {
             // which folder to serve from on localhost:8080.
-            // rebuilds, done by the server, are only put into memory and not reflected on the file system.
+            // dist files are only put into memory and not reflected on the file system.
             
             // TODO If your page expects to find the bundle files on a different path,
             // you can change this with the publicPath option in the dev server's configuration.
@@ -47,21 +49,29 @@ module.exports = (env, argv) => {
             ]
         },
         plugins: [
-          // reset output.path on build while !cleanStaleWebpackAssets avoids the deletion of index.html on incremental builds.
-          new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }), 
-          
-          // generate index.html that references output files dynamically.
-          // A custom HTML template is needed for React's root div to be placed.
-          new HtmlWebpackPlugin({
-            template: './src/index.html'
-          })
-        ]
-    }
+            // reset output.path on build while !cleanStaleWebpackAssets avoids the deletion of index.html on incremental builds.
+            new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }), 
+            
+            // generate index.html that references output files dynamically.
+            // A custom HTML template is needed for React's root div to be placed.
+            new HtmlWebpackPlugin({
+                template: './src/index.html',
+                favicon: './src/assets/favicon.ico'
+            }),
 
-    if (env.analyse) {
-        // visual representation of bundles and chunks.
-        config.plugins.push(new BundleAnalyzerPlugin())
+            // visual representation of bundles and chunks.
+            new BundleAnalyzerPlugin({
+                analyzerMode: env.analyse ? "server" : "disabled",
+            })
+        ],
+        
+        optimization: { 
+            minimize: false,
+            // the entry bundle contains the runtime and manifest, that can differ between deployments. This can cause unnecessary
+            // changes in content-hashing and hence cache busting. This boilterplate can be extracted into a separate bundle.
+            // runtimeChunk: 'single',
+            
+            // splitChunks: { ... }
+        }
     }
-
-    return config;
 };
