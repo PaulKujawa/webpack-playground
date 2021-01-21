@@ -10,7 +10,7 @@ module.exports = (env = {}, argv) => {
 
     return {
         entry: {
-            index: './src/index.jsx'
+            index: './src/index.tsx'
         },
         output: {
             // where to put any output file - the dist folder for the webserver and nginx.
@@ -20,7 +20,8 @@ module.exports = (env = {}, argv) => {
             // publicPath: '/'
         },
         resolve: {
-            extensions: ['.js', '.jsx']
+            // so file extensions can be left out in imports
+            extensions: ['.js', '.ts', '.tsx']
         },
         // see https://webpack.js.org/configuration/devtool/#production for further optimisation
         devtool: isProd ? 'source-map' : 'eval-cheap-source-map',
@@ -44,7 +45,8 @@ module.exports = (env = {}, argv) => {
                 { test: /\.html$/, use: ['html-loader'] },
                 // style-loader takes care of HMR too
                 { test: /\.css$/, use: ['style-loader', 'css-loader'] },
-                { test: /\.(js|jsx)$/, use: ['babel-loader'], exclude: /node_modules/ },
+                { test: /\.jsx?$/, use: 'babel-loader', exclude: /node_modules/ },
+                { test: /\.tsx?$/, use: 'ts-loader', exclude: /node_modules/ },
                 { test: /\.(gif|jpg)$/, type: 'asset/resource' }
             ]
         },

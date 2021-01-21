@@ -1,0 +1,22 @@
+- allowSyntheticDefaultImports
+  - to write `import React from 'react'` instead of `import * as React from 'react'`
+- declaration
+  - emit Type Definition Files for your exported ones
+- jsx
+  - supports `preserve`, `react`, and `react-native`
+  - `preverse` outputs `jsx` and leaves the transpiling to Babel
+  - `react` outputs `js` and transpiles to `React.createNode`
+- lib
+  - defines what language features are allowed
+  - should be `target` + polyfilled features like `"ES2020.BigInt"`
+- module
+  - what module system your target supports. _ES5 ? CommonJs : ES6_
+  - don't use ESNext, as it includes e.g. ES2020 export-ns-from, what is not supported by < TS v3.8
+- moduleResolution
+  - always `node`
+- target
+  - newest ES version your oldest supported browser supports
+  - used to transpile language syntax like arrow functions
+- outDir
+  - needed when using `declaration`.
+  - Besides declaration files both output and `include` are otherwise configured via webpack.
