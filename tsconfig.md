@@ -1,3 +1,4 @@
+## Compiler Options
 - allowSyntheticDefaultImports
   - to write `import React from 'react'` instead of `import * as React from 'react'`
 - declaration
@@ -21,7 +22,7 @@
   - needed when using `declaration`.
   - Besides declaration files both output and `include` are otherwise configured via webpack.
 
-Config a level higher
+## Config a level higher
 - exclude & include
   - include defaults to `[**/*]` if `files` is not set
   - exclude defaults to `[node_modules]`
