@@ -3,28 +3,35 @@
   - to write `import React from 'react'` instead of `import * as React from 'react'`
 - declaration
   - emit Type Definition Files for your exported ones
+  - `declarationDir` is needed because webpack's output config is not used for this
 - jsx
   - supports `preserve`, `react`, and `react-native`
   - `preverse` outputs `jsx` and leaves the transpiling to Babel
   - `react` outputs `js` and transpiles to `React.createNode`
 - lib
   - defines what language features are allowed
-  - should be `target` + polyfilled features like `"ES2020.BigInt"`
+  - should be `target` + polyfilled features like `["ES2016", "ES2017.Object"]`
+  - acts like `<=` so `ES2016` also allows complete `ES2015`
+  - should be mirroring Babel's support (ES2015-ES2020 as of now) for it picks the polyfills
 - module
-  - what module system your target supports. _ES5 ? CommonJs : ES6_
-  - don't use ESNext, as it includes e.g. ES2020 export-ns-from, what is not supported by < TS v3.8
+  - target module system (commonJs would transform `import` to `require`)
+  - what module system your target supports. `ES5 ? CommonJs : ES2015`
+  - with webpack though it does not matter, since webpack uses its own import-system. That's why ES2020 for dynamic imports can be used regardless of the `target`.
 - moduleResolution
   - always `node`
 - target
-  - newest ES version your oldest supported browser supports
+  - target ES version
+  - should be the newest the oldest targeted browser supports
   - used to transpile language syntax like arrow functions
-- outDir
-  - needed when using `declaration`.
-  - Besides declaration files both output and `include` are otherwise configured via webpack.
+  - while language features still need to be polyfilled (e.g. with Babel) and added to `lib`
+- types
+  - defines the global types (so not types of respective ES imports)
+  - loads all `node_modules/@types` by default (typically node, jest, express)
+  - this default import of `node` affects `lib` in an undesired way.
 
 ## Config a level higher
 - exclude & include
   - include defaults to `[**/*]` if `files` is not set
   - exclude defaults to `[node_modules]`
-  - so by default only but the full imported file tree
+  - so by default the folder and subfolders as well as imported ambient folders
   - `skipLibCheck` can be set to ignore d.ts files of ambient module imports
