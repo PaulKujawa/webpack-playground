@@ -23,6 +23,7 @@ module.exports = (api) => {
       // when run via Jest, transpiling needs happen via Babel. Hence it needs transpiler for React & TS.
       "@babel/preset-react",
       "@babel/preset-typescript"
-    ]
+    ],
+    "plugins": ["@babel/plugin-transform-runtime"]
   }
 }
