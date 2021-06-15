@@ -1,3 +1,4 @@
+import { Button } from "@material-ui/core";
 import React from "react";
 import ReactDOM from "react-dom";
 import ImageDogeUrl from "./assets/doge.jpg"; // includes domain and port
@@ -24,7 +25,7 @@ const App = () => {
             <img style={{ height: "400px", width: "400px" }} src={ImageDogeUrl} />
             <input value={input} onChange={(event) => setInput(event.target.value)} />
 
-            <button onClick={() => onClick()}>clicky</button>
+            <Button variant="outlined" color="primary" onClick={() => onClick()}>Clicky</Button>
         </div>
     );
 };

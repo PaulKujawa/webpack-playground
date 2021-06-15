@@ -12,7 +12,8 @@
         "moduleResolution": "node",
         "strict": true,
         "target": "ESNext",
-        "types": [],
+        "types": ["jest"],
+        "paths": {}
     },
     "exclude": [
         "node_modules"
