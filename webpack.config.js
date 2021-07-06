@@ -67,9 +67,7 @@ module.exports = (env = {}, argv) => {
             }),
 
             // visual representation of bundles and chunks.
-            new BundleAnalyzerPlugin({
-                analyzerMode: env.analyse ? "server" : "disabled",
-            })
+            ...(env.analyse ? [new BundleAnalyzerPlugin()] : [])
         ],
 
         optimization: {
